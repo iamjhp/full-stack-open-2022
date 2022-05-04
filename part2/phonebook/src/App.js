@@ -3,12 +3,14 @@ import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
 import personService from './services/persons'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [message, setMessage] = useState('')
 
   useEffect(() => {
     personService
@@ -24,6 +26,13 @@ const App = () => {
 
   const handleNubmerChange = (event) => {
     setNewNumber(event.target.value)
+  }
+
+  const setNotificationMessage =(text) => {
+    setMessage(text)
+    setTimeout(() => {
+      setMessage('')
+    }, 5000)
   }
 
   const addPerson = (event) => {
@@ -46,6 +55,7 @@ const App = () => {
           .then(returnedPerson => {
             setPersons(persons.map(person => person.name !== newPerson.name ? person : returnedPerson))
           })
+        setNotificationMessage(`Updated ${newPerson.name}`)
       }
     } else {
       personService
@@ -53,6 +63,11 @@ const App = () => {
         .then(returendPerson => {
           setPersons(persons.concat(returendPerson))
         })
+        
+      setMessage(`Added ${newPerson.name}`)
+      setTimeout(() => {
+        setMessage('')
+      }, 4000)
     }
     setNewName('')
     setNewNumber('')
@@ -69,7 +84,7 @@ const App = () => {
        setPersons(persons.filter(person => person.id !== id))
       })
       .catch(error => {
-        alert( `the person '${toDeletePerson.name}' doesn't exist`)
+        setNotificationMessage(`the person '${toDeletePerson.name}' doesn't exist`)
       })
     }
   }
@@ -81,6 +96,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter filterName={filterName} filterPerson={filterPerson}/>
       <h3>Add a new</h3>
       <PersonForm persons={persons} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNubmerChange={handleNubmerChange} addPerson={addPerson}/>
