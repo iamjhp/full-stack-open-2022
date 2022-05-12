@@ -54,29 +54,32 @@ const App = () => {
           .updatePerson(foundedPerson.id, newPerson)
           .then(returnedPerson => {
             setPersons(persons.map(person => person.name !== newPerson.name ? person : returnedPerson))
+            setNotificationMessage(`Updated ${newPerson.name}`)
           })
-        setNotificationMessage(`Updated ${newPerson.name}`)
+          .catch(error => {
+            setNotificationMessage(`${error.response.data.error}`)
+          })
       }
     } else {
       personService
         .createNewPerson(newPerson)
         .then(returendPerson => {
           setPersons(persons.concat(returendPerson))
+
+          setNotificationMessage(`Added ${newPerson.name}`)
         })
-        
-      setMessage(`Added ${newPerson.name}`)
-      setTimeout(() => {
-        setMessage('')
-      }, 4000)
+        .catch(error => {
+          setNotificationMessage(`${error.response.data.error}`)
+        })
     }
     setNewName('')
     setNewNumber('')
   }
 
   const deletePerson = event => {
-    const id = parseInt(event.target.id)
+    const id = event.target.id
     const toDeletePerson = persons.find(person => person.id === id)
-
+    
     if (window.confirm(`Delete ${toDeletePerson.name} ?`)) {
       personService
       .deletePerson(id)
