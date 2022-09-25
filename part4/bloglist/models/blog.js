@@ -7,8 +7,14 @@ const blogSchema = new mongoose.Schema({
     minlength: 2
   },
   author: String,
-  url: String,
-  likes: Number
+  url: { 
+    type: String,
+    required: true
+  },
+  likes: {
+    type: Number,
+    default: 0
+  }
 })
 
 const Blog = mongoose.model('Blog', blogSchema)
