@@ -6,15 +6,15 @@ const api = supertest(app)
 
 const Blog = require('../models/blog')
 
-beforeEach(async () => {
-  await Blog.deleteMany({})
-
-  const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
-  const promiseArray = blogObjects.map(blog => blog.save())
-  await Promise.all(promiseArray) 
-}, 100000)
-
 describe('when there is initially some blogs saved', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+  
+    const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
+    const promiseArray = blogObjects.map(blog => blog.save())
+    await Promise.all(promiseArray) 
+  })
+
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -42,7 +42,7 @@ describe('viewing a specific blog', () => {
     const blogToView = blogsAtStart[1]
   
     const resultBlog = await api
-      .get(`/api/blogs/${blogToView["_id"]}`)
+      .get(`/api/blogs/${blogToView["id"]}`)
       .expect(200)
       .expect('Content-Type', /application\/json/)
     
@@ -62,18 +62,22 @@ describe('viewing a specific blog', () => {
   test('unique identifier id is defined', async () => {
     const response = await api.get('/api/blogs')
   
-    expect(response.body[0]["_id"]).toBeDefined()
+    expect(response.body[0]["id"]).toBeDefined()
   
   })
 })
 
 describe('additional of a new blog', () => {
   test('a valid blog can be added', async () => {
+    const userAtStart = await helper.usersInDb()
+    const userId = userAtStart[0].id
+
     const newBlog = {
       title: "test 3",
       author: "author 3",
       url: "www.test3.com",
-      likes: 3
+      likes: 3,
+      userId: userId
     }
   
     await api
@@ -92,10 +96,15 @@ describe('additional of a new blog', () => {
   })
 
   test('blog without title is not added', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const userAtStart = await helper.usersInDb()
+    const userId = userAtStart[0].id
+
     const newBlog = {
       author: "author 3",
       url: "www.test3.com",
-      likes: 3
+      likes: 11,
+      userId: userId
     }
   
     await api
@@ -105,14 +114,18 @@ describe('additional of a new blog', () => {
   
     const blogsAtEnd = await helper.blogsInDb()
   
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
   })
-  
+
   test('likes is 0 by default if it is not defined', async () => {
+    const userAtStart = await helper.usersInDb()
+    const userId = userAtStart[0].id
+
     const newBlog = {
       title: "likes 0",
       author: "likes test",
-      url: "www.likes0.com"
+      url: "www.likes0.com",
+      userId: userId
     }
   
     await api
@@ -126,18 +139,6 @@ describe('additional of a new blog', () => {
   
     expect(blog.likes).toEqual(0)
   })
-
-  test('blog with missing title or url will not added', async () => {
-    const newBlog = {
-      author: "title url",
-      likes: 10
-    }
-  
-    await api
-      .post('/api/blogs')
-      .send(newBlog)
-      .expect(400)
-  })
 })
 
 describe('deletion of a blog', () => {
@@ -146,11 +147,11 @@ describe('deletion of a blog', () => {
     const blogToDelete = blogsAtStart[0]
 
     await api
-      .delete(`/api/blogs/${blogToDelete._id}`)
+      .delete(`/api/blogs/${blogToDelete.id}`)
       .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
 
     const titles = blogsAtEnd.map(b => b.title)
     expect(titles).not.toContain(blogToDelete.title)
@@ -163,7 +164,7 @@ describe('updating likes of a blog', () => {
     const blogToUpdate = blogsAtStart[0]
 
     await api
-      .put(`/api/blogs/${blogToUpdate._id}`)
+      .put(`/api/blogs/${blogToUpdate.id}`)
       .send({
         likes: 7
       })
@@ -172,7 +173,7 @@ describe('updating likes of a blog', () => {
     const blogsAtEnd = await helper.blogsInDb()
     const updatedBlog = blogsAtEnd[0]
 
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
     expect(updatedBlog.likes).toBe(7)
   })
 })
