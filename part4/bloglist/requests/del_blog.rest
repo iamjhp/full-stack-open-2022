@@ -1,11 +1,3 @@
-POST http://localhost:3001/api/blogs
+DELETE http://localhost:3001/api/blogs/63381486bc9dd9dcebe13fb3
 Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFlbSI6InRlc3QiLCJpZCI6IjYzMzIzODgwMjhhYzE5ZGY3NjAzZWFkMyIsImlhdCI6MTY2NDYxOTYzOCwiZXhwIjoxNjY0NjIzMjM4fQ.eIE3BZVyG4KEAh1R6bxCGFTe90WsJteyb1WB1HngUhc
-
-{
-  "title": "tokennew33", 
-  "author": "test 2025",
-  "url": "www.mypassword8.com",
-  "likes": 15,
-  "userId": "6332388028ac19df7603ead3"
-}
