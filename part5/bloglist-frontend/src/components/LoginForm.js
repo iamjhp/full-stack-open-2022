@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import { useState } from 'react'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 import Notification from './Notification'
@@ -14,10 +14,11 @@ const Login = (props) => {
       const user = await loginService.login({
         username, password,
       })
+
       window.localStorage.setItem(
         'loggedInBlogUser', JSON.stringify(user)
       )
-      
+
       blogService.setToken(user.token)
       props.setUser(user)
       setUsername('')
@@ -28,24 +29,24 @@ const Login = (props) => {
   }
 
   const notify = (message, type='info') => {
-    setNotification({ message, type})
+    setNotification({ message, type })
     setTimeout(() => {
       setNotification(null)
     }, 4000)
   }
- 
+
   const loginForm = () => (
     <div>
-    <Notification notification={notification}/>
+      <Notification notification={notification}/>
       <form onSubmit={handleLogin}>
         <div>
           username
-            <input 
-              type="text"
-              value={username}
-              name="Username"
-              onChange={({target}) => setUsername(target.value)}
-            />
+          <input
+            type="text"
+            value={username}
+            name="Username"
+            onChange={({ target }) => setUsername(target.value)}
+          />
         </div>
         <div>
           password
@@ -53,7 +54,7 @@ const Login = (props) => {
             type="text"
             value={password}
             name="Password"
-            onChange={({target}) => setPassword(target.value)}
+            onChange={({ target }) => setPassword(target.value)}
           />
         </div>
         <button type="submit">login</button>
@@ -64,9 +65,7 @@ const Login = (props) => {
   return (
     <div>
       <h2>log in to application</h2>
-
-      {loginForm()
-      }
+      {loginForm()}
     </div>
   )
 }

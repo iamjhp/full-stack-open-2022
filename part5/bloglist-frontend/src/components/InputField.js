@@ -1,6 +1,6 @@
 const InputField = (props) => (
   <div>
-    {props.label}: 
+    {props.label}:
     <input
       type="text"
       value={props.value}

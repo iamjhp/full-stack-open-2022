@@ -1,9 +1,9 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import InputField from './InputField'
 import blogService from '../services/blogs'
 import Notification from './Notification'
 
-const BlogForm = ({ blogs, setBlogs }) => {
+const BlogForm = ({ blogs, setBlogs, blogRefs }) => {
   const [state, setState] = useState({
     title: '',
     author: '',
@@ -22,7 +22,7 @@ const BlogForm = ({ blogs, setBlogs }) => {
   }
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
     try {
       const newBlog = {
         ...state,
@@ -31,19 +31,19 @@ const BlogForm = ({ blogs, setBlogs }) => {
       const returnedBlog = await blogService.create(newBlog)
       setBlogs(blogs.concat(returnedBlog))
       notify(`a new blog ${newBlog.title} by ${newBlog.author} added`)
-
+      blogRefs.current.toggleVisibility()
       setState({
         title: '',
         author: '',
         url: '',
       })
     } catch (exception) {
-      notify(`adding a new blog failed`, 'alert')
+      notify('adding a new blog failed', 'alert')
     }
   }
 
   const notify = (message, type='info') => {
-    setNotification({ message, type})
+    setNotification({ message, type })
     setTimeout(() => {
       setNotification(null)
     }, 4000)

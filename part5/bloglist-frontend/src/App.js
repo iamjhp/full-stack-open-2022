@@ -7,7 +7,6 @@ import Togglable from './components/Toggleable'
 const App = () => {
   const [user, setUser] = useState(null)
 
-
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedInBlogUser')
     if (loggedUserJSON) {
@@ -35,10 +34,10 @@ const App = () => {
   return (
     <div>
       <div>
-          <p>
-            {user.name} logged in
-            <button onClick={handleLogOut}>log out</button>
-          </p>
+        <p>
+          {user.name} logged in
+          <button onClick={handleLogOut}>log out</button>
+        </p>
       </div>
       <Blog />
     </div>
