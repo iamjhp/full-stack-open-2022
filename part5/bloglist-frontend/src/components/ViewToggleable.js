@@ -16,7 +16,7 @@ const ViewToggleable = (props) => {
       <span style={hideWhenVisible}>
         <button onClick={toggleVisibility}>view</button>
       </span>
-      <span style={showWhenVisible}>
+      <span style={showWhenVisible} className="viewToggleBlog">
         <button onClick={toggleVisibility}>cancel</button>
         <div>
           {props.children}

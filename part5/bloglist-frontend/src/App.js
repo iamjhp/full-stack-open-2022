@@ -6,6 +6,7 @@ import Togglable from './components/Toggleable'
 
 const App = () => {
   const [user, setUser] = useState(null)
+  const [blogs, setBlogs] = useState([])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedInBlogUser')
@@ -39,7 +40,7 @@ const App = () => {
           <button onClick={handleLogOut}>log out</button>
         </p>
       </div>
-      <Blog />
+      <Blog blogs={blogs} setBlogs={setBlogs} />
     </div>
   )
 }

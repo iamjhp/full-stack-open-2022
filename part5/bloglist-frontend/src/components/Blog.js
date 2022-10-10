@@ -1,11 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import blogService from '../services/blogs'
 import Togglable from './Toggleable'
 import BlogForm from './BlogForm'
 import ViewToggleable from './ViewToggleable'
 
-const Blog = () => {
-  const [blogs, setBlogs] = useState([])
+const Blog = ({ blogs, setBlogs }) => {
 
   const blogFormRef = useRef()
 
