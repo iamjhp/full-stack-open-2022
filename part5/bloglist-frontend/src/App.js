@@ -15,11 +15,26 @@ const App = () => {
       setUser(user)
       blogService.setToken(user.token)
     }
+
+    blogService.getAll().then(blogs =>
+      setBlogs( blogs )
+    )
   }, [])
 
   const handleLogOut = () => {
     window.localStorage.removeItem('loggedInBlogUser')
     setUser(null)
+  }
+
+  const handleLike = (blog) => {
+    const updatedBlog = {
+      ...blog,
+      likes: blog.likes + 1
+    }
+
+    blogService.likeBlog(blog.id, updatedBlog).then(
+      setBlogs(blogs.map(b => b.id !== blog.id ? b : updatedBlog))
+    )
   }
 
   if (user === null) {
@@ -40,7 +55,7 @@ const App = () => {
           <button onClick={handleLogOut}>log out</button>
         </p>
       </div>
-      <Blog blogs={blogs} setBlogs={setBlogs} />
+      <Blog blogs={blogs} setBlogs={setBlogs} handleLike={handleLike} />
     </div>
   )
 }

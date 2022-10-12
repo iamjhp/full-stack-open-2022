@@ -2,8 +2,9 @@ import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import Blog from './Blog'
+import userEvent from '@testing-library/user-event'
 
-test('renders blogs', async () => {
+describe('<Blog />', () => {
   const blog = [{
     title: 'jest',
     author: 'jest tester',
@@ -11,19 +12,38 @@ test('renders blogs', async () => {
     id: 1
   }]
 
-  const container = render(<Blog blogs={blog} />)
+  const mockHandler = jest.fn()
 
-  const header = screen.getByText('blogs')
-  expect(header).toBeDefined()
+  let compontent
+  beforeEach(() => {
+    compontent = render(<Blog blogs={blog} setBlogs={[]} handleLike={mockHandler} />).container
+  })
 
-  const title = await screen.findByText('jest jest tester')
-  expect(title).toBeDefined()
+  test('renders blogs', async () => {
+    const header = screen.getByText('blogs')
+    expect(header).toBeDefined()
 
-  const url = screen.queryByText('www.jtest.dd')
-  expect(url).not.toBeVisible()
+    const title = await screen.findByText('jest jest tester')
+    expect(title).toBeDefined()
 
-  const div = container.container.querySelector('.viewToggleBlog')
-  expect(div).not.toBeVisible()
+    const url = screen.queryByText('www.jtest.dd')
+    expect(url).not.toBeVisible()
+
+    const div = compontent.querySelector('.viewToggleBlog')
+    expect(div).not.toBeVisible()
+  })
+
+  test('like button is clicked twice', async () => {
+
+    const user = userEvent.setup()
+    const vieButton = screen.getByText('view')
+    await user.click(vieButton)
+  
+    const likeButton = screen.getByText('like')
+    await user.click(likeButton)
+    await user.click(likeButton)
+  
+    expect(mockHandler.mock.calls).toHaveLength(2)
+  })
 })
-
 

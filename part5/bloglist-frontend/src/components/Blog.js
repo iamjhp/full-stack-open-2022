@@ -1,10 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import blogService from '../services/blogs'
 import Togglable from './Toggleable'
 import BlogForm from './BlogForm'
 import ViewToggleable from './ViewToggleable'
 
-const Blog = ({ blogs, setBlogs }) => {
+const Blog = ({ blogs, setBlogs, handleLike, handleLike2 }) => {
 
   const blogFormRef = useRef()
 
@@ -14,23 +14,6 @@ const Blog = ({ blogs, setBlogs }) => {
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
-  }
-
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
-  }, [])
-
-  const handleLike = (blog) => {
-    const updatedBlog = {
-      ...blog,
-      likes: blog.likes + 1
-    }
-
-    blogService.likeBlog(blog.id, updatedBlog).then(
-      setBlogs(blogs.map(b => b.id !== blog.id ? b : updatedBlog))
-    )
   }
 
   const handleDelete = (blog) => {
@@ -44,13 +27,13 @@ const Blog = ({ blogs, setBlogs }) => {
       <Togglable buttonLabel='new note' ref={blogFormRef}>
         <BlogForm blogs={blogs} setBlogs={setBlogs} blogRefs={blogFormRef}/>
       </Togglable>
+      <button onClick={handleLike2}>test</button>
       <div>
         <h2>blogs</h2>
         {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
           <div key={blog.id} style={blogStyle}>
-            <span>
-              {blog.title} {blog.author}
-            </span>
+            <span></span>
+            {blog.title} {blog.author}
             <ViewToggleable blog={blog} handleDelete={() => handleDelete(blog)} buttonLabel='view'>
               <div>
                 {blog.url}
