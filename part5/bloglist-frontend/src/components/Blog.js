@@ -40,9 +40,10 @@ const Blog = ({ blogs, setBlogs, handleLike, handleLike2 }) => {
       <div>
         <h2>blogs</h2>
         {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-          <div key={blog.id} style={blogStyle}>
-            <span></span>
-            {blog.title} {blog.author}
+          <div key={blog.id} style={blogStyle} className='blog'>
+            <span>
+              {blog.title} {blog.author}
+            </span>
             <ViewToggleable blog={blog} handleDelete={() => handleDelete(blog)} buttonLabel='view'>
               <div>
                 {blog.url}

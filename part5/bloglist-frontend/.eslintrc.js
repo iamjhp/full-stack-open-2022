@@ -26,7 +26,7 @@ module.exports = {
       ],
       "linebreak-style": [
           "error",
-          "unix"
+          (process.platform === "win32" ? "windows" : "unix")
       ],
       "quotes": [
           "error",

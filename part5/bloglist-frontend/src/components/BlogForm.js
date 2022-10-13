@@ -10,7 +10,6 @@ const BlogForm = ({ createBlog }) => {
   })
   const [notification, setNotification] = useState(null)
 
-
   const handleOnChange = (event) => {
     const value = event.target.value
 
@@ -50,8 +49,8 @@ const BlogForm = ({ createBlog }) => {
       <div>
         <Notification notification={notification}/>
         <InputField label="title" value={state.title} name="title" onChange={handleOnChange} id={'blogName-input'}/>
-        <InputField label="author" value={state.author} name="author" onChange={handleOnChange}/>
-        <InputField label="url" value={state.url} name="url" onChange={handleOnChange}/>
+        <InputField label="author" value={state.author} name="author" onChange={handleOnChange} id={'author-input'}/>
+        <InputField label="url" value={state.url} name="url" onChange={handleOnChange} id={'url-input'}/>
         <button>create</button>
       </div>
     </form>
