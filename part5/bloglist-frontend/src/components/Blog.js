@@ -22,10 +22,19 @@ const Blog = ({ blogs, setBlogs, handleLike, handleLike2 }) => {
     }
   }
 
+  const addBlog = (blogObject) => {
+    blogFormRef.current.toggleVisibility()
+    blogService
+      .create(blogObject)
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+      })
+  }
+
   return (
     <div>
       <Togglable buttonLabel='new note' ref={blogFormRef}>
-        <BlogForm blogs={blogs} setBlogs={setBlogs} blogRefs={blogFormRef}/>
+        <BlogForm blogs={blogs} setBlogs={setBlogs} createBlog={addBlog}/>
       </Togglable>
       <button onClick={handleLike2}>test</button>
       <div>

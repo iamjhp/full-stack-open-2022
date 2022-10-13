@@ -6,6 +6,7 @@ const InputField = (props) => (
       value={props.value}
       name={props.name}
       onChange={(props.onChange)}
+      id={props.id}
     />
   </div>
 )

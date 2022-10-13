@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import InputField from './InputField'
-import blogService from '../services/blogs'
 import Notification from './Notification'
 
-const BlogForm = ({ blogs, setBlogs, blogRefs }) => {
+const BlogForm = ({ createBlog }) => {
   const [state, setState] = useState({
     title: '',
     author: '',
@@ -28,10 +27,7 @@ const BlogForm = ({ blogs, setBlogs, blogRefs }) => {
         ...state,
         likes: 0
       }
-      const returnedBlog = await blogService.create(newBlog)
-      setBlogs(blogs.concat(returnedBlog))
-      notify(`a new blog ${newBlog.title} by ${newBlog.author} added`)
-      blogRefs.current.toggleVisibility()
+      createBlog(newBlog)
       setState({
         title: '',
         author: '',
@@ -53,7 +49,7 @@ const BlogForm = ({ blogs, setBlogs, blogRefs }) => {
     <form onSubmit={handleSubmit}>
       <div>
         <Notification notification={notification}/>
-        <InputField label="title" value={state.title} name="title" onChange={handleOnChange}/>
+        <InputField label="title" value={state.title} name="title" onChange={handleOnChange} id={'blogName-input'}/>
         <InputField label="author" value={state.author} name="author" onChange={handleOnChange}/>
         <InputField label="url" value={state.url} name="url" onChange={handleOnChange}/>
         <button>create</button>
