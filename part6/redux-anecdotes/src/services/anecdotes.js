@@ -20,7 +20,17 @@ const createNewAnecdote = async (content) => {
   return response.data
 }
 
+
+const updateVote = async (id) => {
+  const obj = await axios.get(`${baseUrl}/${id}`)
+  const newObj = {...obj.data, votes: obj.data.votes + 1}
+  const response = await axios.put(`${baseUrl}/${newObj.id}`, newObj)
+  return response.data
+}
+
+// eslint-disable-next-line
 export default {
   getAllAnecdotes,
-  createNewAnecdote
-}
+  createNewAnecdote,
+  updateVote
+} 
